@@ -45,3 +45,6 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+build/.vs/qtfile++/v14/.suo
+build/qtfile++.VC.db
+*.opendb
