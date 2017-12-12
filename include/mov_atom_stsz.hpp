@@ -37,9 +37,11 @@ public:
 public:
 	virtual bool read(Reader * r);
 public:
-	unsigned int getSampleSize(unsigned int sample) const;
+	unsigned int getSampleSize(size_t sample) const;
+	unsigned int entriesCount() const;
 private:
 	unsigned int m_sampleSize;
+	unsigned int m_entriesCount;
 	std::vector<unsigned int> m_stsz; //we need it fo find duration
 };
 

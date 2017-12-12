@@ -42,17 +42,23 @@ bool STSZAtom::read(Reader * r) {
 	}
 
 	m_sampleSize = readInteger<unsigned int>(r);
-	unsigned int entries = readInteger<unsigned int>(r);
+	m_entriesCount = readInteger<unsigned int>(r);
 
-	for (unsigned int i = 0; i < entries; ++i) {
-		unsigned int size = readInteger<unsigned int>(r);
-		m_stsz.push_back(size);
+	if (!m_sampleSize) {
+		for (unsigned int i = 0; i < m_entriesCount; ++i) {
+			unsigned int size = readInteger<unsigned int>(r);
+			m_stsz.push_back(size);
+		}
 	}
 
 	return end == r -> position();
 }
 
-unsigned int STSZAtom::getSampleSize(unsigned int sample) const {
+unsigned int STSZAtom::entriesCount() const {
+	return m_entriesCount;
+}
+
+unsigned int STSZAtom::getSampleSize(size_t sample) const {
 	if (m_sampleSize) {
 		return m_sampleSize;
 	}

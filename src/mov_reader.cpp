@@ -24,6 +24,26 @@
 #include <mov_atom.hpp>
 #include <mov_atom_moov.hpp>
 #include <mov_atom_tkhd.hpp>
+#include <mov_atom_stsz.hpp>
+#include <mov_atom_hdlr.hpp>
+
+inline MOVAtom * getAtom(MOVAtom * root, const std::vector<int> & chain) {
+	if (!root) {
+		return 0;
+	}
+
+	MOVAtom * result = root;
+
+	for (auto i : chain) {
+		result = result -> getChild(i);
+
+		if (!result) {
+			break;
+		}
+	}
+
+	return result;
+}
 
 bool MOVReader::open(const mov_string & path) {
 	m_reader = createReader(path);
@@ -52,11 +72,33 @@ size_t MOVReader::tracksCount() const {
 }
 
 size_t MOVReader::samplesCount(size_t trackIndex) const {
-	return 0; //todo
+	//most correct way will be to check stsz
+
+	MOOVAtom * moov = dynamic_cast<MOOVAtom *>(m_root -> getChild('moov'));
+
+	if (moov) {
+		STSZAtom * stsz = dynamic_cast<STSZAtom *>(getAtom(moov -> getTrack(trackIndex), {'mdia', 'minf', 'stbl', 'stsz'}));
+
+		if (stsz) {
+			return stsz -> entriesCount(); //todo update logic for raw audio case
+		}
+	}
+
+	return 0;
 }
 
 size_t MOVReader::sampleSize(size_t trackIndex, size_t sampleIndex) const {
-	return 0; //todo
+	MOOVAtom * moov = dynamic_cast<MOOVAtom *>(m_root -> getChild('moov'));
+
+	if (moov) {
+		STSZAtom * stsz = dynamic_cast<STSZAtom *>(getAtom(moov -> getTrack(trackIndex), { 'mdia', 'minf', 'stbl', 'stsz' }));
+
+		if (stsz) {
+			return stsz -> getSampleSize(sampleIndex); //todo update logic for raw audio case
+		}
+	}
+
+	return 0;
 }
 
 size_t MOVReader::syncPointLeft(size_t trackIndex, size_t sampleIndex) const {
@@ -68,7 +110,29 @@ size_t MOVReader::syncPointRight(size_t trackIndex, size_t sampleIndex) const {
 }
 
 int MOVReader::getTrackType(size_t trackIndex) const {
-	return 0;
+	MOOVAtom * moov = dynamic_cast<MOOVAtom *>(m_root -> getChild('moov'));
+
+	if (moov) {
+		HDLRAtom * hdlr = dynamic_cast<HDLRAtom *>(getAtom(moov -> getTrack(trackIndex), { 'mdia', 'hdrl' }));
+
+		if (hdlr) {
+			switch (hdlr -> getSubType())
+			{
+			case 'vide':
+				return TrackType::Video;
+			case 'soun':
+				return TrackType::Audio;
+			case 'clcp':
+				return TrackType::Captions;
+			case 'tmcd':
+				return TrackType::Timecode;
+			default:
+				break;
+			}
+		}
+	}
+
+	return TrackType::Unknown;
 }
 
 Timecode MOVReader::getSampleTimecode(size_t trackIndex, size_t sampleIndex) const {
