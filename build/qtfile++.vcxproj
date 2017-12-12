@@ -41,6 +41,7 @@
     <ClCompile Include="..\src\mov_atom_stts.cpp" />
     <ClCompile Include="..\src\mov_atom_tkhd.cpp" />
     <ClCompile Include="..\src\mov_atom_tmcddata.cpp" />
+    <ClCompile Include="..\src\mov_file.cpp" />
     <ClCompile Include="..\src\mov_file_io.cpp" />
     <ClCompile Include="..\src\mov_io.cpp" />
   </ItemGroup>

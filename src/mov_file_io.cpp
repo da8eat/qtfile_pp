@@ -104,7 +104,7 @@ bool FileReader::eof() const {
 std::shared_ptr<Reader> createReader(const std::wstring & path) {
 	FileReader * reader = new (std::nothrow) FileReader();
 
-	if (!reader || !reader->open(path)) {
+	if (!reader || !reader -> open(path)) {
 		delete reader;
 		return std::shared_ptr<Reader>();
 	}

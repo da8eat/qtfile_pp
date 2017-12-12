@@ -1,5 +1,5 @@
 /*
- * mov_file_io.hpp is part of qtfile++.
+ * mov_defs.hpp is part of qtfile++.
  *
  * Copyright (C) 2017 -  Alex Mogurenko <alex@mogurenko.com>
  *
@@ -17,15 +17,50 @@
  * along with qtfile++.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef __MOV_FILE_IO_HPP__
-#define __MOV_FILE_IO_HPP__
+#ifndef __MOV_DEFS_HPP__
+#define __MOV_DEFS_HPP__
 
-#include <memory>
-#include "mov_defs.hpp"
+#include <string>
 
-struct Reader;
+#if defined(_WIN32)
+typedef std::wstring mov_string;
+#else
+typedef std::string mov_string;
+#endif
 
-std::shared_ptr<Reader> createReader(const mov_string & path);
+struct TrackType {
+	enum {
+		Video,
+		Audio,
+		Captions,
+		Timecode,
+		Unknown //technically not implemented
+	};
+};
 
+struct VideoInfo {
+
+};
+
+struct AudioInfo {
+
+};
+
+struct CaptionsInfo {
+
+};
+
+struct TimecodeInfo {
+
+};
+
+struct Timecode {
+	unsigned int hour;
+	unsigned int minute;
+	unsigned int second;
+	unsigned int frame;
+
+	int dropFlag;
+};
 
 #endif //__MOV_FILE_IO_HPP__

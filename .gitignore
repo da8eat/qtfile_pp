@@ -48,3 +48,9 @@ Temporary Items
 build/.vs/qtfile++/v14/.suo
 build/qtfile++.VC.db
 *.opendb
+*.obj
+*.log
+build/x64/Debug/qtfile++.idb
+*.pdb
+build/x64/Debug/qtfile++.lib
+*.tlog
