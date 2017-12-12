@@ -1,5 +1,5 @@
 /*
- * mov_file.hpp is part of qtfile++.
+ * mov_reader.hpp is part of qtfile++.
  *
  * Copyright (C) 2017 -  Alex Mogurenko <alex@mogurenko.com>
  *
@@ -17,8 +17,8 @@
  * along with qtfile++.  If not, see <http://www.gnu.org/licenses/>
  */
 
-#ifndef __MOV_FILE_HPP__
-#define __MOV_FILE_HPP__
+#ifndef __MOV_READER_HPP__
+#define __MOV_READER_HPP__
 
 #include <memory>
 #include "mov_defs.hpp"
@@ -26,7 +26,7 @@
 struct Reader;
 struct MOVAtom;
 
-struct MOVFile
+struct MOVReader
 {
 public:
 	bool open(const mov_string & path);
@@ -53,4 +53,4 @@ private:
 	std::shared_ptr<Reader> m_reader;
 };
 
-#endif //__MOV_FILE_HPP__
+#endif //__MOV_READER_HPP__
